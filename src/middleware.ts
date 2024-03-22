@@ -23,7 +23,7 @@ let locales = ['en', 'de', 'es', 'sv', 'nl'];
 // Get the preferred locale, similar to the above or using a library
 // function getLocale(request) { console.log(request) }
  
-export default function middleware(request: NextRequest) {
+export default async function middleware(request: NextRequest) {
   // Check if there is any supported locale in the pathname
   console.log("Request", request)
   const { pathname } = request.nextUrl
@@ -31,7 +31,8 @@ export default function middleware(request: NextRequest) {
   console.log("IP", ip)
   // const geo = geoip.lookup(ip as string);
   // console.log("Geo", geo);
-  fetch(`https://ipinfo.io/${'104.26.1.188'}/country`).then((res) => res.text()).then((data) => {console.log("Data", data)});
+  const data = await fetch(`https://ipinfo.io/${ip}/country`).then((res) => res.text());
+  console.log("Data", data);
   const pathnameHasLocale = locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   )
