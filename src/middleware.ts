@@ -111,12 +111,12 @@ export default async function middleware(request: NextRequest) {
   getCountryByIp(request);
   const { pathname } = request.nextUrl
   // const ip = request.headers.get("x-forwarded-for");
-  const ip ="193.215.41.146";
-  console.log("IP", ip)
-  // const geo = geoip.lookup(ip as string);
-  // console.log("Geo", geo);
-  const data = await fetch(`https://ipinfo.io/${ip}/country`).then((res) => res.text());
-  console.log("Data", data);
+  // const ip ="193.215.41.146";
+  // console.log("IP", ip)
+  // // const geo = geoip.lookup(ip as string);
+  // // console.log("Geo", geo);
+  // const data = await fetch(`https://ipinfo.io/${ip}/country`).then((res) => res.text());
+  // console.log("Data", data);
   const pathnameHasLocale = locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   )
@@ -125,7 +125,7 @@ export default async function middleware(request: NextRequest) {
  
   // Redirect if there is no locale
   // const locale = getLocale(request)
-  request.nextUrl.pathname = `/${data}${pathname}`
+  request.nextUrl.pathname = `/${locales[0]}${pathname}`
   // e.g. incoming request is /products
   // The new URL is now /en-US/products
   return NextResponse.redirect(request.nextUrl)
