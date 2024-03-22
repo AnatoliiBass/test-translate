@@ -118,7 +118,7 @@ export default async function middleware(request: NextRequest) {
   const data = await fetch(`https://ipinfo.io/${ip}/country`).then((res) => res.text());
   console.log("Data", data);
   const pathnameHasLocale = locales.some(
-    (locale) => pathname.startsWith(`/${data}/`) || pathname === `/${data}`
+    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   )
  
   if (pathnameHasLocale) return
