@@ -27,7 +27,8 @@ export default async function middleware(request: NextRequest) {
   // Check if there is any supported locale in the pathname
   console.log("Request", request)
   const { pathname } = request.nextUrl
-  const ip = request.headers.get("x-forwarded-for");
+  // const ip = request.headers.get("x-forwarded-for");
+  const ip ="193.215.41.146";
   console.log("IP", ip)
   // const geo = geoip.lookup(ip as string);
   // console.log("Geo", geo);
