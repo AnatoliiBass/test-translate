@@ -62,6 +62,8 @@ console.log("Pathname", pathname);
       )
     );
     }
+  }else{
+    return NextResponse.next();
   }
 }
 
