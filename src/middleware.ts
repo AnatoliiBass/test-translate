@@ -34,10 +34,18 @@ console.log("Pathname", pathname);
     if(ip) {
       // await fetch(`https://ipinfo.io/${ip}/country`).then((res) => res.text()).then((data) => {
         // const data = request.headers.get("x-forwarded-for");
-        console.log("Request.headers", request, request.headers);
-        const data = "NL";
+        console.log("Request.headers", request.geo?.country);
+        const data = request.geo?.country;
         console.log("Data", data);
-        const currentLocale = locales.find((locale) => locale.country === data.trim());
+        if (!data) {
+          return NextResponse.redirect(
+            new URL(
+              `/${defaultLocale}${pathname}${request.nextUrl.search}`,
+              request.nextUrl.href
+            )
+          );
+        }
+        const currentLocale = locales.find((locale) => locale.country === data);
         console.log("Current locale", currentLocale);
         console.log("Request.nextUrl.href", request.nextUrl.href);
         console.log("Request.url", request.url);
