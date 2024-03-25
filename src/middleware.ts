@@ -63,8 +63,11 @@ console.log("Pathname", pathname);
     );
     }
   }else{
-    return NextResponse.next();
-  }
+    return NextResponse.redirect(
+      new URL(
+        `/${pathname}${request.nextUrl.search}`
+      )
+    );
 }
 
 export const config = {
