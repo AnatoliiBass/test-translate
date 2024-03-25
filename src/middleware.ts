@@ -35,6 +35,7 @@ console.log("Pathname", pathname);
       await fetch(`https://ipinfo.io/${ip}/country`).then((res) => res.text()).then((data) => {
         console.log("Data", data);
         const currentLocale = locales.find((locale) => locale.country === data.trim());
+        console.log("Current locale", currentLocale);
         if(currentLocale && currentLocale.language){
           return NextResponse.redirect(
             new URL(
