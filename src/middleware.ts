@@ -42,15 +42,15 @@ console.log("Pathname", pathname);
         if(currentLocale && currentLocale.language){
           return NextResponse.redirect(
             new URL(
-              `${currentLocale.language}${pathname}${request.nextUrl.search}`,
-              request.url
+              `/${currentLocale.language}${pathname}${request.nextUrl.search}`,
+              request.nextUrl.href
             )
           );
         }else{
           return NextResponse.redirect(
             new URL(
               `/${defaultLocale}${pathname}${request.nextUrl.search}`,
-              request.url
+              request.nextUrl.href
             )
           );
         }
@@ -61,7 +61,7 @@ console.log("Pathname", pathname);
     return NextResponse.redirect(
       new URL(
         `/${defaultLocale}${pathname}${request.nextUrl.search}`,
-        request.url
+        request.nextUrl.href
       )
     );
     }
@@ -69,7 +69,7 @@ console.log("Pathname", pathname);
     return NextResponse.redirect(
       new URL(
         `/${pathname}${request.nextUrl.search}`,
-        request.url
+        request.nextUrl.href
       )
     );
       }
