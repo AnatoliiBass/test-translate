@@ -14,10 +14,10 @@ console.log("Pathname", pathname);
     console.log("Default value");
     return NextResponse.redirect(
       new URL(
-        // pathname.replace(
+        pathname.replace(
           `/${defaultLocale}`,
-        //   pathname === `/${defaultLocale}` ? "/" : ""
-        // ),
+        pathname === `/${defaultLocale}` ? "/" : ""
+        ),
         request.url
       )
     );
@@ -36,7 +36,7 @@ console.log("Pathname", pathname);
         console.log("Data", data);
         const currentLocale = locales.find((locale) => locale.country === data.trim());
         if(currentLocale && currentLocale.language){
-          return NextResponse.rewrite(
+          return NextResponse.redirect(
             new URL(
               `/${currentLocale.language}${pathname}${request.nextUrl.search}`,
               request.nextUrl.href
