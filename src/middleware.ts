@@ -36,6 +36,8 @@ console.log("Pathname", pathname);
         console.log("Data", data);
         const currentLocale = locales.find((locale) => locale.country === data.trim());
         console.log("Current locale", currentLocale);
+        console.log("Request.nextUrl.href", request.nextUrl.href);
+        console.log("Request.url", request.url);
         if(currentLocale && currentLocale.language){
           return NextResponse.rewrite(
             new URL(
