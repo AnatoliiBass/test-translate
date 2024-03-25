@@ -42,13 +42,15 @@ console.log("Pathname", pathname);
         if(currentLocale && currentLocale.language){
           return NextResponse.rewrite(
             new URL(
-              `${currentLocale.language}${pathname}${request.nextUrl.search}`
+              `${currentLocale.language}${pathname}${request.nextUrl.search}`,
+              request.url
             )
           );
         }else{
           return NextResponse.rewrite(
             new URL(
-              `/${defaultLocale}${pathname}${request.nextUrl.search}`
+              `/${defaultLocale}${pathname}${request.nextUrl.search}`,
+              request.url
             )
           );
         }
@@ -58,14 +60,16 @@ console.log("Pathname", pathname);
     // or /nl/whatever, and then reWRITE the request to that it is handled properly.
     return NextResponse.rewrite(
       new URL(
-        `/${defaultLocale}${pathname}${request.nextUrl.search}`
+        `/${defaultLocale}${pathname}${request.nextUrl.search}`,
+        request.url
       )
     );
     }
   }else{
     return NextResponse.rewrite(
       new URL(
-        `/${pathname}${request.nextUrl.search}`
+        `/${pathname}${request.nextUrl.search}`,
+        request.url
       )
     );
       }
