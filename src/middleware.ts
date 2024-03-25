@@ -38,10 +38,11 @@ console.log("Pathname", pathname);
         console.log("Current locale", currentLocale);
         console.log("Request.nextUrl.href", request.nextUrl.href);
         console.log("Request.url", request.url);
+        console.log("Request.nextUrl.search", request.nextUrl.search);
         if(currentLocale && currentLocale.language){
-          return NextResponse.rewrite(
+          return NextResponse.redirect(
             new URL(
-              `/${currentLocale.language}${pathname}${request.nextUrl.search}`,
+              `${currentLocale.language}${pathname}${request.nextUrl.search}`,
               request.nextUrl.href
             )
           );
