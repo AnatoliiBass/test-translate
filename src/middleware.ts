@@ -14,10 +14,10 @@ console.log("Pathname", pathname);
     console.log("Default value");
     return NextResponse.redirect(
       new URL(
-        pathname.replace(
+        // pathname.replace(
           `/${defaultLocale}`,
-          pathname === `/${defaultLocale}` ? "/" : ""
-        ),
+        //   pathname === `/${defaultLocale}` ? "/" : ""
+        // ),
         request.url
       )
     );
