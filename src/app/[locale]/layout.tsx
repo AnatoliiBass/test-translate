@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../../globals.css";
-
+import cldr from 'cldr';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -16,6 +16,8 @@ export default function RootLayout({
   params: { locale: string};
 }>) {
   console.log("Locale: ", params);
+  // const allLocales = cldr.extractLanguageSupplementalData();
+  // console.log("All locales", allLocales);
   return (
     <html lang={params.locale}>
       <body className={inter.className}>{children}</body>

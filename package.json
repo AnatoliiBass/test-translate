@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/cldr": "^7.1.4",
     "@types/geoip-lite": "^1.4.4",
+    "cldr": "^7.5.0",
     "geoip-lite": "^1.4.10",
     "next": "14.1.4",
     "next-intl": "^3.9.5",

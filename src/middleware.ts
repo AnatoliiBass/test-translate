@@ -1,142 +1,73 @@
-import createMiddleware from 'next-intl/middleware';
-import { NextRequest, NextResponse } from "next/server";
-import geoip from 'geoip-lite';
- 
-let locales = ['en', 'de', 'es', 'sv', 'nl'];
-const ipAddressRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+import { NextResponse, type NextRequest } from "next/server";
+import { defaultLocale, locales } from "./constant";
+import { getIp } from "./utils";
 
-function isIpAddress(str:string): boolean {
-  return ipAddressRegex.test(str);
-}
-
-function getCountryByIp(request: NextRequest): string {
-  console.log("Request", request)
-  const ip1 = request.headers.get("x-forwarded-for");
-  console.log("IP1", ip1);
-  // if (ip1 && isIpAddress(ip1)) {
-  //   const geo = geoip.lookup(ip1);
-  //   if (geo) {
-  //     console.log("x-forwarded-for", geo.country.toLowerCase());
-  //   }
-  // }
-  const ip2 = request.headers.get("cf-connecting-ip");
-  console.log("IP2", ip2);
-  // if (ip2 && isIpAddress(ip2)) {
-  //   const geo = geoip.lookup(ip2);
-  //   if (geo) {
-  //     console.log("cf-connecting-ip", geo.country.toLowerCase());
-  //   }
-  // }
-   const ip3 = request.headers.get("x-real-ip");
-  console.log("IP3", ip3);
-  // if (ip3 && isIpAddress(ip3)) {
-  //   const geo = geoip.lookup(ip3);
-  //   if (geo) {
-  //     console.log("x-real-ip", geo.country.toLowerCase());
-  //   }
-  // }
-  const ip4 = request.headers.get("x-client-ip");
-  console.log("IP4", ip4);
-  // if (ip4 && isIpAddress(ip4)) {
-  //   const geo = geoip.lookup(ip4);
-  //   if (geo) {
-  //     console.log("x-client-ip", geo.country.toLowerCase());
-  //   }
-  // }
-  const ip5 = request.headers.get("x-host");
-  console.log("IP5", ip5);
-  // if (ip5 && isIpAddress(ip5)) {
-  //   const geo = geoip.lookup(ip5);
-  //   if (geo) {
-  //     console.log("x-host", geo.country.toLowerCase());
-  //   }
-  // }
-  const ip6 = request.headers.get("x-originating-ip");
-  console.log("IP6", ip6);
-  // if (ip6 && isIpAddress(ip6)) {
-  //   const geo = geoip.lookup(ip6);
-  //   if (geo) {
-  //     console.log("x-originating-ip", geo.country.toLowerCase());
-  //   }
-  // }
-  const ip7 = request.headers.get("x-remote-ip");
-  console.log("IP7", ip7);
-  // if (ip7 && isIpAddress(ip7)) {
-  //   const geo = geoip.lookup(ip7);
-  //   if (geo) {
-  //     console.log("x-remote-ip", geo.country.toLowerCase());
-  //   }
-  // }
-  const ip8 = request.headers.get("x-remote-addr");
-  console.log("IP8", ip8);
-  // if (ip8 && isIpAddress(ip8)) {
-  //   const geo = geoip.lookup(ip8);
-  //   if (geo) {
-  //     console.log("x-remote-addr", geo.country.toLowerCase());
-  //   }
-  // }
-  const ip9 = request.headers.get("x-remote-host");
-  console.log("IP9", ip9);
-  // if (ip9 && isIpAddress(ip9)) {
-  //   const geo = geoip.lookup(ip9);
-  //   if (geo) {
-  //     console.log("x-remote-host", geo.country.toLowerCase());
-  //   }
-  // }
-  return 'en';
-}
-
-// const middleware = createMiddleware({
-//   // Add locales you want in the app
-//   locales: ['en', 'de', 'es', 'sv', 'nl', 'no'],
-//   domains: [],
-//   // Default locale if no match
-//   defaultLocale: 'en'
-// });
-
-// export default middleware;
-
-// export const config = {
-//   // Match only internationalized pathnames
-//   matcher: ['/', '/(de|es|en|sv|nl|no)/:page*']
-// };
-
-
- 
-// Get the preferred locale, similar to the above or using a library
-// function getLocale(request) { console.log(request) }
- 
-export default async function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   // Check if there is any supported locale in the pathname
-  getCountryByIp(request);
-  const { pathname } = request.nextUrl
-  // const ip = request.headers.get("x-forwarded-for");
-  // const ip ="193.215.41.146";
-  // console.log("IP", ip)
-  // // const geo = geoip.lookup(ip as string);
-  // // console.log("Geo", geo);
-  // const data = await fetch(`https://ipinfo.io/${ip}/country`).then((res) => res.text());
-  // console.log("Data", data);
-  const pathnameHasLocale = locales.some(
-    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
-  )
- 
-  if (pathnameHasLocale) return
- 
-  // Redirect if there is no locale
-  // const locale = getLocale(request)
-  request.nextUrl.pathname = `/${locales[0]}${pathname}`
-  // e.g. incoming request is /products
-  // The new URL is now /en-US/products
-  return NextResponse.redirect(request.nextUrl)
+  const { pathname } = request.nextUrl;
+console.log("Pathname", pathname);
+  if (
+    pathname.startsWith(`/${defaultLocale}/`) ||
+    pathname === `/${defaultLocale}`
+  ) {
+    // The incoming request is for /en/whatever, so we'll reDIRECT to /whatever
+    console.log("Default value");
+    return NextResponse.redirect(
+      new URL(
+        pathname.replace(
+          `/${defaultLocale}`,
+          pathname === `/${defaultLocale}` ? "/" : ""
+        ),
+        request.url
+      )
+    );
+  }
+
+  const pathnameIsMissingLocale = locales.every(
+    (locale) => !pathname.startsWith(`/${locale.language}/`) && pathname !== `/${locale.language}`
+  );
+
+  if (pathnameIsMissingLocale) {
+    console.log("Pathname is missing locale");
+    const ip = getIp(request);
+    console.log("IP in middleware", ip);
+    if(ip) {
+      const data = await fetch(`https://ipinfo.io/${ip}/country`).then((res) => {console.log("res.text: ", res.text());return res.text()});
+      console.log("Data", data);
+      const currentLocale = locales.find((locale) => locale.country === data.trim());
+      if(currentLocale && currentLocale.language){
+        return NextResponse.rewrite(
+          new URL(
+            `/${currentLocale.language}${pathname}${request.nextUrl.search}`,
+            request.nextUrl.href
+          )
+        );
+      }else{
+        return NextResponse.rewrite(
+          new URL(
+            `/${defaultLocale}${pathname}${request.nextUrl.search}`,
+            request.nextUrl.href
+          )
+        );
+      }
+    }else{
+      // Now for EITHER /en or /nl (for example) we're going to tell Next.js that the request is for /en/whatever
+    // or /nl/whatever, and then reWRITE the request to that it is handled properly.
+    return NextResponse.rewrite(
+      new URL(
+        `/${defaultLocale}${pathname}${request.nextUrl.search}`,
+        request.nextUrl.href
+      )
+    );
+    }
+  }
 }
- 
+
 export const config = {
-  matcher: ['/', '/(de|es|en|sv|nl|no)/:page*']
-  // matcher: [
-  //   // Skip all internal paths (_next)
-  //   '/((?!_next).*)',
-  //   // Optional: only run on root (/) URL
-  //   // '/'
-  // ],
-}
+  matcher: [
+    // Skip all internal paths (_next)
+    "/((?!api|static|.*\\..*|_next).*)",
+    // Optional: only run on root (/) URL
+    // '/'
+  ],
+};
