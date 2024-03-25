@@ -68,6 +68,7 @@ console.log("Pathname", pathname);
         `/${pathname}${request.nextUrl.search}`
       )
     );
+      }
 }
 
 export const config = {
