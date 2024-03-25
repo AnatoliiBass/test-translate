@@ -1,5 +1,5 @@
-import { useTranslations } from "next-intl";
-export default function Home({params: {locale}}: {params: {locale: string}}) {
+//import { useTranslations } from "next-intl";
+export default async function Home({params: {locale}}: {params: {locale: string}}) {
   console.log("page.tsx", locale);
   // const t = useTranslations("Home");
 

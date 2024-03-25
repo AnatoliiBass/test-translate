@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../../globals.css";
-import cldr from 'cldr';
 import { locales } from "@/constant";
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,7 +13,7 @@ export async function generateStaticParams() {
   return [...locales.map((locale) => ({ locale: locale.language }))];
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children, params
 }: Readonly<{
   children: React.ReactNode;
