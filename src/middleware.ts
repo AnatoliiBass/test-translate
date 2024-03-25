@@ -42,15 +42,13 @@ console.log("Pathname", pathname);
         if(currentLocale && currentLocale.language){
           return NextResponse.redirect(
             new URL(
-              `${currentLocale.language}${pathname}${request.nextUrl.search}`,
-              request.nextUrl.href
+              `${currentLocale.language}${pathname}${request.nextUrl.search}`
             )
           );
         }else{
-          return NextResponse.rewrite(
+          return NextResponse.redirect(
             new URL(
-              `/${defaultLocale}${pathname}${request.nextUrl.search}`,
-              request.nextUrl.href
+              `/${defaultLocale}${pathname}${request.nextUrl.search}`
             )
           );
         }
@@ -58,10 +56,9 @@ console.log("Pathname", pathname);
     }else{
       // Now for EITHER /en or /nl (for example) we're going to tell Next.js that the request is for /en/whatever
     // or /nl/whatever, and then reWRITE the request to that it is handled properly.
-    return NextResponse.rewrite(
+    return NextResponse.redirect(
       new URL(
-        `/${defaultLocale}${pathname}${request.nextUrl.search}`,
-        request.nextUrl.href
+        `/${defaultLocale}${pathname}${request.nextUrl.search}`
       )
     );
     }
