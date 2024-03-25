@@ -78,7 +78,8 @@ console.log("Pathname", pathname);
 export const config = {
   matcher: [
     // Skip all internal paths (_next)
-    "/((?!api|static|.*\\..*|_next).*)",
+    // "/((?!api|static|.*\\..*|_next).*)",
+    "/((?!_next).*)",
     // Optional: only run on root (/) URL
     // '/'
   ],
