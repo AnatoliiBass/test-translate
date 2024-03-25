@@ -27,7 +27,7 @@ console.log("Pathname", pathname);
     (locale) => !pathname.startsWith(`/${locale.language}/`) && pathname !== `/${locale.language}`
   );
 
-  if (pathnameIsMissingLocale) {
+  if (pathname=== "/") {
     console.log("Pathname is missing locale");
     const ip = getIp(request);
     console.log("IP in middleware", ip);
@@ -43,7 +43,7 @@ console.log("Pathname", pathname);
           return NextResponse.redirect(
             new URL(
               `/${currentLocale.language}${pathname}${request.nextUrl.search}`,
-              request.nextUrl.href
+              request.url
             )
           );
         }else{
@@ -66,12 +66,12 @@ console.log("Pathname", pathname);
     );
     }
   }else{
-    return NextResponse.redirect(
-      new URL(
-        `/${pathname}${request.nextUrl.search}`,
-        request.nextUrl.href
-      )
-    );
+    // return NextResponse.redirect(
+    //   new URL(
+    //     `/${pathname}${request.nextUrl.search}`,
+    //     request.nextUrl.href
+    //   )
+    // );
       }
 }
 
