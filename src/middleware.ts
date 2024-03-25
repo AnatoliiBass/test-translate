@@ -40,7 +40,7 @@ console.log("Pathname", pathname);
           return NextResponse.redirect(
             new URL(
               `/${currentLocale.language}${pathname}${request.nextUrl.search}`,
-              request.nextUrl.href
+              request.url
             )
           );
         }else{
