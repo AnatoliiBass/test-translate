@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { defaultLocale, locales } from "./constant";
 import { getIp } from "./utils";
 
-export async function middleware(request: NextRequest) {
+export function middleware(request: NextRequest) {
   // Check if there is any supported locale in the pathname
   const { pathname } = request.nextUrl;
 console.log("Pathname", pathname);
@@ -32,24 +32,25 @@ console.log("Pathname", pathname);
     const ip = getIp(request);
     console.log("IP in middleware", ip);
     if(ip) {
-      const data = await fetch(`https://ipinfo.io/${ip}/country`).then((res) => {console.log("res.text: ", res.text());return res.text()});
-      console.log("Data", data);
-      const currentLocale = locales.find((locale) => locale.country === data.trim());
-      if(currentLocale && currentLocale.language){
-        return NextResponse.rewrite(
-          new URL(
-            `/${currentLocale.language}${pathname}${request.nextUrl.search}`,
-            request.nextUrl.href
-          )
-        );
-      }else{
-        return NextResponse.rewrite(
-          new URL(
-            `/${defaultLocale}${pathname}${request.nextUrl.search}`,
-            request.nextUrl.href
-          )
-        );
-      }
+      fetch(`https://ipinfo.io/${ip}/country`).then((res) => res.text()).then((data) => {
+        console.log("Data", data);
+        const currentLocale = locales.find((locale) => locale.country === data.trim());
+        if(currentLocale && currentLocale.language){
+          return NextResponse.rewrite(
+            new URL(
+              `/${currentLocale.language}${pathname}${request.nextUrl.search}`,
+              request.nextUrl.href
+            )
+          );
+        }else{
+          return NextResponse.rewrite(
+            new URL(
+              `/${defaultLocale}${pathname}${request.nextUrl.search}`,
+              request.nextUrl.href
+            )
+          );
+        }
+      });
     }else{
       // Now for EITHER /en or /nl (for example) we're going to tell Next.js that the request is for /en/whatever
     // or /nl/whatever, and then reWRITE the request to that it is handled properly.
