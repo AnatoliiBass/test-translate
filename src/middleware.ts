@@ -6,22 +6,22 @@ export async function middleware(request: NextRequest) {
   // Check if there is any supported locale in the pathname
   const { pathname } = request.nextUrl;
 console.log("Pathname", pathname);
-  if (
-    pathname.startsWith(`/${defaultLocale}/`) ||
-    pathname === `/${defaultLocale}`
-  ) {
-    // The incoming request is for /en/whatever, so we'll reDIRECT to /whatever
-    console.log("Default value");
-    return NextResponse.redirect(
-      new URL(
-        pathname.replace(
-          `/${defaultLocale}`,
-        pathname === `/${defaultLocale}` ? "/" : ""
-        ),
-        request.url
-      )
-    );
-  }
+  // if (
+  //   pathname.startsWith(`/${defaultLocale}/`) ||
+  //   pathname === `/${defaultLocale}`
+  // ) {
+  //   // The incoming request is for /en/whatever, so we'll reDIRECT to /whatever
+  //   console.log("Default value");
+  //   return NextResponse.redirect(
+  //     new URL(
+  //       pathname.replace(
+  //         `/${defaultLocale}`,
+  //       pathname === `/${defaultLocale}` ? "/" : ""
+  //       ),
+  //       request.url
+  //     )
+  //   );
+  // }
 
   const pathnameIsMissingLocale = locales.every(
     (locale) => !pathname.startsWith(`/${locale.language}/`) && pathname !== `/${locale.language}`
@@ -37,10 +37,10 @@ console.log("Pathname", pathname);
         const currentLocale = locales.find((locale) => locale.country === data.trim());
         console.log("Current locale", currentLocale);
         if(currentLocale && currentLocale.language){
-          return NextResponse.redirect(
+          return NextResponse.rewrite(
             new URL(
               `/${currentLocale.language}${pathname}${request.nextUrl.search}`,
-              request.url
+              request.nextUrl.href
             )
           );
         }else{
