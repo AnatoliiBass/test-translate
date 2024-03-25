@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { defaultLocale, locales } from "./constant";
 import { getIp } from "./utils";
 
-export async function middleware(request: NextRequest) {
+export function middleware(request: NextRequest) {
   // Check if there is any supported locale in the pathname
   const { pathname } = request.nextUrl;
 console.log("Pathname", pathname);
@@ -32,7 +32,10 @@ console.log("Pathname", pathname);
     const ip = getIp(request);
     console.log("IP in middleware", ip);
     if(ip) {
-      await fetch(`https://ipinfo.io/${ip}/country`).then((res) => res.text()).then((data) => {
+      // await fetch(`https://ipinfo.io/${ip}/country`).then((res) => res.text()).then((data) => {
+        // const data = request.headers.get("x-forwarded-for");
+        console.log("Request.headers", request, request.headers);
+        const data = "NL";
         console.log("Data", data);
         const currentLocale = locales.find((locale) => locale.country === data.trim());
         console.log("Current locale", currentLocale);
@@ -54,7 +57,7 @@ console.log("Pathname", pathname);
             )
           );
         }
-      });
+      // });
     }else{
       // Now for EITHER /en or /nl (for example) we're going to tell Next.js that the request is for /en/whatever
     // or /nl/whatever, and then reWRITE the request to that it is handled properly.
