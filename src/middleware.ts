@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { defaultLocale, locales } from "./constant";
 import { getIp } from "./utils";
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   // Check if there is any supported locale in the pathname
   const { pathname } = request.nextUrl;
 console.log("Pathname", pathname);
@@ -32,7 +32,7 @@ console.log("Pathname", pathname);
     const ip = getIp(request);
     console.log("IP in middleware", ip);
     if(ip) {
-      fetch(`https://ipinfo.io/${ip}/country`).then((res) => res.text()).then((data) => {
+      await fetch(`https://ipinfo.io/${ip}/country`).then((res) => res.text()).then((data) => {
         console.log("Data", data);
         const currentLocale = locales.find((locale) => locale.country === data.trim());
         if(currentLocale && currentLocale.language){
